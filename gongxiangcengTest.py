@@ -1,7 +1,7 @@
 import keras
-from keras.layers import Input, LSTM, Dense,Conv2D
+from keras.layers import Input, LSTM, Dense, Conv2D
 from keras.models import Model
-
+from keras.models import Sequential
 
 
 def testT():
@@ -23,5 +23,25 @@ def testT():
     print(conv.get_input_at(0))
     print(conv.get_input_at(1))
 
+
+##fit_generator
+def generate_arrays_from_file(path):
+    while 1:
+        f = open(path)
+        for line in f:
+            # create Numpy arrays of input data
+            # and labels, from each line in the file
+            x, y = process_line(line)
+            yield (x, y)
+    f.close()
+
+
 if __name__ == '__main__':
-    testT()
+    model = Sequential()
+    model.add(Dense(32, activation='relu', input_dim=784))
+    model.add(Dense(32, activation='relu'))
+    model.compile(optimizer='rmsprop',
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+    model.fit_generator(generate_arrays_from_file('./my_file.txt'),
+                        samples_per_epoch=10, epochs=5)
