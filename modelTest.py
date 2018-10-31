@@ -37,3 +37,7 @@ model = Model(inputs=[main_input, auxiliary_input], outputs=[main_output, auxili
 model.compile(optimizer='rmsprop', loss='binary_crossentropy',
               loss_weights=[1., 0.2])
 
+
+
+print(model.to_json())
+model.save_weights("./weight.h5")
